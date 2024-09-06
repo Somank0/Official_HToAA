@@ -7,9 +7,9 @@ Go to das and search for
 
 source /cvmfs/cms.cern.ch/rucio/setup-py3.sh
 
-export RUCIO_ACCOUNT=<username>
+export RUCIO_ACCOUNT=[username]
 
-rucio add-rule scope:/name/of/the/dataset <no. of copies> <disk storage name> --lifetime <in seconds> 
+rucio add-rule scope:/name/of/the/dataset [no. of copies] [disk storage name] --lifetime <in seconds> 
 
 Replace scope with cms (if accessing a CMS dataset) or any other scope as required.
 

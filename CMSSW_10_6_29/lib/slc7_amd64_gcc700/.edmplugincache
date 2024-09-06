@@ -1,0 +1,4 @@
+pluginPhoton_RefinedRecHit_NTuplizer.so Photon_RefinedRecHit_NTuplizer CMS%EDM%Framework%Module
+pluginPhoton_RefinedRecHit_NTuplizer.so Photon_RefinedRecHit_NTuplizer CMS%EDM%Framework%ParameterSet%Description
+pluginPhoton_Skimmer.so Photon_Skimmer CMS%EDM%Framework%Module
+pluginPhoton_Skimmer.so Photon_Skimmer CMS%EDM%Framework%ParameterSet%Description

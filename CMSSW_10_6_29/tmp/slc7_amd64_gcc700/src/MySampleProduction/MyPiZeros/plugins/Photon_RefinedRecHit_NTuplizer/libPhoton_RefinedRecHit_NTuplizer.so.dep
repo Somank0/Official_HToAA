@@ -1,0 +1,5 @@
+tmp/slc7_amd64_gcc700/src/MySampleProduction/MyPiZeros/plugins/Photon_RefinedRecHit_NTuplizer/Photon_RefinedRecHit_NTuplizer.cc.o: \
+ src/MySampleProduction/MyPiZeros/plugins/Photon_RefinedRecHit_NTuplizer.cc \
+ src/MySampleProduction/MyPiZeros/plugins/Photon_RefinedRecHit_NTuplizer.h \
+ src/MySampleProduction/MyPiZeros/plugins/getEcalMapXML.h \
+

@@ -9,9 +9,18 @@ source /cvmfs/cms.cern.ch/rucio/setup-py3.sh
 
 export RUCIO_ACCOUNT=[username]
 
-rucio add-rule scope:/name/of/the/dataset [no. of copies] [disk storage name] --lifetime <in seconds> 
+rucio add-rule scope:/name/of/the/dataset [no. of copies] [disk storage name] --lifetime [in seconds] 
 
 Replace scope with cms (if accessing a CMS dataset) or any other scope as required.
 
+#To skim the official H to AA samples, run the following commands
+
+git clone https://github.com/Somank0/Official_HToAA.git 
+
+cd CMSSW_10_6_29/src/MySampleProduction/MyPiZeros/python
+
+cmssw-el7
+
+./runSkimmer_Official_HtoAA.sh 1 1 1  (change the name of the files in runSkimmer_Official_HtoAA.sh as needed)
 
 

@@ -1,0 +1,17 @@
+*.pickle
+*.root
+*.npz
+*.tar
+__init__.py
+*.pyc
+.*.swp
+*.txt
+*.log
+*.tgz
+*.png
+*.pdf
+.*.png
+MyPiZeros/test/120.0_SinglePi0E10+SinglePi0E10+DIGI+RECO/AGun/CMSSW_10_2_16_UL/config/
+MyPiZeros/test/120.0_SinglePi0E10+SinglePi0E10+DIGI+RECO/AGun/CMSSW_10_2_16_UL/.SCRAM/
+MySampleProduction/MyPiZeros/python/Skimmed/plots/
+

@@ -17,7 +17,7 @@ Replace scope with cms (if accessing a CMS dataset) or any other scope as requir
 
 git clone https://github.com/Somank0/Official_HToAA.git 
 
-cd CMSSW_10_6_29/src/MySampleProduction/MyPiZeros/python
+cd CMSSW_10_6_29/src/Official_HtoAA_samples/MyPiZeros/python
 
 cmssw-el7
 

@@ -1,1 +1,0 @@
-Photon_RefinedRecHit_NTuplizer MySampleProduction/MyPiZeros/plugins/Photon_RefinedRecHit_NTuplizer.cc

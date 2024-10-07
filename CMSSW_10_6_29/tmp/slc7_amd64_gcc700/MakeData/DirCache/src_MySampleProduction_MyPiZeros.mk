@@ -1,2 +1,0 @@
-ALL_PACKAGES += MySampleProduction/MyPiZeros
-subdirs_src_MySampleProduction_MyPiZeros := src_MySampleProduction_MyPiZeros_plugins src_MySampleProduction_MyPiZeros_python src_MySampleProduction_MyPiZeros_test

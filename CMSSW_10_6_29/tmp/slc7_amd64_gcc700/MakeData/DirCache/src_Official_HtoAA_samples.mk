@@ -1,0 +1,2 @@
+ALL_SUBSYSTEMS+=Official_HtoAA_samples
+subdirs_src_Official_HtoAA_samples = src_Official_HtoAA_samples_MyPiZeros

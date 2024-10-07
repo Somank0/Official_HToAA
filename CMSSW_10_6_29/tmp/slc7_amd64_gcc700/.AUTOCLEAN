@@ -1,0 +1,8 @@
+
+/usr/bin/rm -f lib/slc7_amd64_gcc700/pluginPhoton_RefinedRecHit_NTuplizer.so lib/slc7_amd64_gcc700/Photon_RefinedRecHit_NTuplizer.edmplugin
+/usr/bin/rm -f lib/slc7_amd64_gcc700/pluginPhoton_Skimmer.so lib/slc7_amd64_gcc700/Photon_Skimmer.edmplugin
+/usr/bin/rm -f src/MySampleProduction/MyPiZeros/python/__init__.py src/MySampleProduction/MyPiZeros/python/__init__.pyc
+/usr/bin/rm -f test/slc7_amd64_gcc700/testMySampleProductionMyPiZerosTP
+/usr/bin/rm -rf tmp/slc7_amd64_gcc700/edmplugins/poison/MySampleProduction/MyPiZeros
+/usr/bin/touch tmp/common/cache/packs/changed
+edmPluginRefresh lib/slc7_amd64_gcc700

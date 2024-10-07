@@ -20,14 +20,21 @@ options.register('inputFile',
         VarParsing.VarParsing.varType.string,
         "File containing a list of the EXACT location of the output file  (default = ~/)"
         )
+options.register('datasetname',"~/", VarParsing.VarParsing.multiplicity.singleton,
+        VarParsing.VarParsing.varType.string,
+        "Folder with name of dataset to store output file  (default = ~/)"
+        )
 
 
 options.parseArguments()
 infilename = str(options.inputFile).split('/')[-1]
+datasetName = str(options.datasetname).split('/')[-1]
 print(infilename)
+options.inputFile = 'root://cms-xrd-global.cern.ch//' + options.inputFile
 #options.inputFile = 'root://eoscms//' + options.inputFile
-options.inputFile = "file:"+options.inputFile
+#options.inputFile = "file:"+options.inputFile
 print(options.inputFile)
+print(options.datasetname)
 process.source = cms.Source("PoolSource",
                                 # replace 'myfile.root' with the source file you want to use
                                 fileNames = cms.untracked.vstring(
@@ -69,13 +76,13 @@ process.nTuplelize = cms.EDAnalyzer('Photon_RefinedRecHit_NTuplizer',
         eeebClusters = cms.InputTag("particleFlowEGamma:EBEEClusters:RECO"),
         esClusters = cms.InputTag("particleFlowEGamma:ESClusters:RECO"),
 
-        ebNeighbourXtalMap = cms.FileInPath("MySampleProduction/MyPiZeros/python/LUT/EB_xtal_dR0p3_map.root"),
-        eeNeighbourXtalMap = cms.FileInPath("MySampleProduction/MyPiZeros/python/LUT/EE_xtal_dR0p3_map.root")
+        ebNeighbourXtalMap = cms.FileInPath("Official_HtoAA_samples/MyPiZeros/python/LUT/EB_xtal_dR0p3_map.root"),
+        eeNeighbourXtalMap = cms.FileInPath("Official_HtoAA_samples/MyPiZeros/python/LUT/EE_xtal_dR0p3_map.root")
 	)
 
 
 process.TFileService = cms.Service("TFileService",
-     fileName = cms.string("Skimmed/"+infilename),
+     fileName = cms.string("Skimmed/"+datasetName+"/"+infilename),
 #     fileName = cms.string("Tree_Gamma_ABCD.root"),
       closeFileFast = cms.untracked.bool(True)
   )

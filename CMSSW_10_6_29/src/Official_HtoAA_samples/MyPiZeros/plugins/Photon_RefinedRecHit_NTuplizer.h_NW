@@ -308,7 +308,7 @@ class Photon_RefinedRecHit_NTuplizer : public edm::one::EDAnalyzer<edm::one::Sha
       vector<float> Pho_CorrectedEnergy;
       vector<float> Pho_CorrectedEnergyError;
 
-      //std::vector<float> Pho_Gen_Pt;
+     // std::vector<float> Pho_Gen_Pt;
 
       std::vector<float> A_lead_Gen_mass;
       std::vector<float> A_lead_Gen_pt;
@@ -320,18 +320,17 @@ class Photon_RefinedRecHit_NTuplizer : public edm::one::EDAnalyzer<edm::one::Sha
       std::vector<float> A_sublead_Gen_eta;
       std::vector<float> A_sublead_Gen_phi;
 
-      //std::vector<float> Pho_Gen_Eta;
-      //std::vector<float> Pho_Gen_Phi;
-      //std::vector<float> Pho_Gen_E;
-      std::vector<float>  A_lead_Pho_Gen_Pt;
-      std::vector<float>  A_lead_Pho_Gen_Eta;
-      std::vector<float>  A_lead_Pho_Gen_Phi;
-      std::vector<float>  A_lead_Pho_Gen_E;
-      std::vector<float>  A_sublead_Pho_Gen_Pt;
-      std::vector<float>  A_sublead_Pho_Gen_Eta;
-      std::vector<float>  A_sublead_Pho_Gen_Phi;
-      std::vector<float>  A_sublead_Pho_Gen_E;
- 
+      /*std::vector<float> Pho_Gen_Eta;
+      std::vector<float> Pho_Gen_Phi;
+      std::vector<float> Pho_Gen_E;*/
+      std::vector<float> A_lead_Pho_Gen_Pt;
+      std::vector<float> A_lead_Pho_Gen_Eta;
+      std::vector<float> A_lead_Pho_Gen_Phi;
+      std::vector<float> A_lead_Pho_Gen_E;
+      std::vector<float> A_sublead_Pho_Gen_Pt;
+      std::vector<float> A_sublead_Pho_Gen_Eta;
+      std::vector<float> A_sublead_Pho_Gen_Phi;
+      std::vector<float> A_sublead_Pho_Gen_E;
 
 
       std::vector<float> H_Gen_mass;

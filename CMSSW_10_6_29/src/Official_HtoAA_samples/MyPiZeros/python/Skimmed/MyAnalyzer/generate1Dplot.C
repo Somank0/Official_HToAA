@@ -1,7 +1,7 @@
 int line_width[12] = {2,2,2,2,2,2,2,2,2,2,2,2};
 int line_style[12] = {1,1,1,1,1,1,1,1,1,1,1,1};                                                                              
 int line_color[9] = {kBlue,kRed,kGreen+2,kViolet+2,kGreen-2,kYellow+1,kGray+2,kMagenta,kBlue+2};
-int line_color1[9]= {kBlue,kGreen+2,kGray+1,kViolet+2,kGreen-2,kYellow+1,kGray+2,kMagenta,kBlue+2};
+int line_color1[9]= {kBlue,kGreen+2,kGray+1,kRed+2,kGreen-2,kYellow+1,kGray+2,kMagenta,kBlue+2};
 int line_color2[9] = {kGreen+2,kBlue,kViolet,kGray,kViolet+2,kGreen-2,kYellow+1,kGray+2,kMagenta};
 vector<int> col={kGreen+2,kBlue,kViolet,kGray,kViolet+2,kGreen-2,kYellow+1,kGray+2,kMagenta,kBlue+2,kMagenta,kCyan};
 vector<int> Style={3008,1001,3008,1001};
@@ -76,7 +76,7 @@ void setLastBinAsOverFlow(TH1F* h_hist){
   cout<<lastBinCt<<"\t"<<"Last bin values"<<endl;
 
 }
-void generate_1Dplot(vector<TH1F*> hist,char const *tag_name="",char const *xlabel="",char const *ylabel="",  int rebin=-1,double ymin=0,double ymax=0,int xmin=-1,int xmax=-1,char const *leg_head="",bool normalize=false, bool log_flag=false, bool DoRebin=false, bool save_canvas=true, char const *title="", vector<string> legend_texts={"nil"})
+void generate_1Dplot(vector<TH1F*> hist,char const *tag_name="",char const *xlabel="",char const *ylabel="",  int rebin=-1,double ymin=0,double ymax=0,int xmin=-1,int xmax=-1,char const *leg_head="",bool normalize=false, bool log_flag=false, bool DoRebin=false, bool save_canvas=true, char const *title="", vector<string> legend_texts={"nil"},bool stat=false)
 {  
      TCanvas *canvas_n1 = new TCanvas(tag_name, tag_name,950,850);
        canvas_n1->Range(-60.25,-0.625,562.25,0.625);
@@ -96,8 +96,16 @@ void generate_1Dplot(vector<TH1F*> hist,char const *tag_name="",char const *xlab
   double pvt_y_min = 0.9;
   //double pvt_dely = 0.18;
   double pvt_dely = 0.15;
-  gStyle->SetOptStat(0);
+  //gStyle->SetOptStat(0);
+  /*if(stat){gStyle->SetOptStat(1);
+	   gStyle->SetStatX(0.95);
   gROOT->ForceStyle();
+	}
+  else {gStyle->SetOptStat(0);
+  gROOT->ForceStyle();
+	}
+  gPad->Modified();
+  gPad->Update();*/
   //gStyle->SetOptFit(0);
   vector<TString> legName;
   //TLegend *legend = new TLegend(0.65,0.95,0.99,0.75);
@@ -165,6 +173,7 @@ void generate_1Dplot(vector<TH1F*> hist,char const *tag_name="",char const *xlab
     
     if(hist.at(i)->GetMaximum() > ymax) ymax = hist.at(i)->GetMaximum();
     if(hist.at(i)->GetMinimum() < ymin) ymin = hist.at(i)->GetMinimum();
+     TPaveStats *ps = (TPaveStats*)hist.at(i)->GetListOfFunctions()->FindObject("stats");
 
     
 
@@ -186,12 +195,14 @@ void generate_1Dplot(vector<TH1F*> hist,char const *tag_name="",char const *xlab
     cout<<"i"<<i<<endl;
     if(i==0) hist.at(i)->Draw("hist ");
     else hist.at(i)->Draw("hist sames");
-	
   }
   legend->Draw();
   if(log_flag) {
       gPad->SetLogy();
     }
+  if(!stat){gStyle->SetOptStat(0);}
+  else {gStyle->SetOptStat(1); gStyle->SetStatX(0.95);}
+gPad->Modified();
 gPad->Update(); 
   TLatex* textOnTop = new TLatex();
   //new
@@ -202,7 +213,7 @@ gPad->Update();
   //textOnTop->DrawLatexNDC(0.72,0.925,en_lat);
 
 
-  gPad->Modified();
+  //gPad->Modified();
                                                                                        
     
  char* canvas_name = new char[1000];
@@ -215,6 +226,7 @@ gPad->Update();
     canvas_n1->SaveAs(canvas_name);  
   } 
 }
+
 
 struct MixedData {
     std::string str1;
@@ -245,63 +257,81 @@ void generate1Dplot()
  
     f[0] = new TFile("plot.root");
     
-    vector<string> filetag=  {"Sample size:112K"};
+    vector<string> filetag=  {"M_a = 1GeV"};
 MixedData varName[] = { // { Name of the plot , xLabel , rebin , ymin , ymax , xmin , xmax , Legend label }
-{"M_gen","Mass (GeV)",10,0,2000,0,2.1,"mass of A"},  
-{"A_gen_pT","pT (GeV)",10,1,2000,0,120,"Gen pT of A"},
-{"A_gen_eta","#eta",10,0,2000,-3,3,"Gen #eta of A"},  
-{"A_gen_phi","#phi",10,0,2000,-4,4,"Gen #phi of A"},
-{"A_gen_energy","Energy (GeV)",10,0,200,0,1000,"Gen energy of A"},
-{"Lorentz boost of A","Lorentz boost (#gamma)",10,0,200,1,7000,"Lorentz boost of A"},
-{"No. of gen photons","No. of photons",10,0,200,0,4,"No. of gen photons"},
-{"Photon1 gen eta","#eta",10,0,200,-3,3,"Pho1 gen #eta"},
-{"Photon1 gen phi","#phi",10,0,200,-4,4,"Pho1 gen #phi"},
-{"Photon1 gen pT","pT (GeV)",10,0,200,0,150,"Pho1 gen pT"},
-{"Photon1 gen E","Energy (GeV)", 10,0,200,0,1000,"Pho1 gen energy"},
-{"Photon2 gen eta","#eta",10,0,200,-3,3,"Pho2 gen #eta"},
-{"Photon2 gen phi","#phi",10,0,200,-4,4,"Pho2 gen #phi"},
-{"Photon2 gen E","energy (GeV)",10,0,200,0,1000,"Pho2 gen energy"},
-{"E_sublead_by_E_lead","ratio",10,0,200,0,1.2,"E_sublead/E_lead"},
-{"No. of reco photons","No. of photons",10,0,200,0,4,"No. of reco photons"},
-{"Photon1 EE rechit eta","#eta",10,0,200,-3,3,"Pho1 EE rechit #eta"},
-{"Pho1_hit_phi","#phi",10,0,200,-4,4,"Pho1 EE rechit #phi"},
-{"Photon2 EE rechit eta","#eta",10,0,200,-4,4,"Pho2 EE rechit #eta"},
-{"Pho2_hit_phi","#phi",10,0,200,-4,4,"Pho2 EE rechit #phi"},
-{"Pho1_hit_X","ECAL X (in cm)",10,0,200,-160,160,"Pho1 EE rechit x"},
-{"Pho1_hit_Y","ECAL Y (in cm)",10,0,200,-160,160,"Pho1 EE rechit y"},
-{"Pho1_hit_Z","ECAL Z (in cm)",10,0,200,250,350,"Pho1 EE rechit z"},
-{"Pho1_hit_E","Energy (GeV)",10,0,200,0,50,"Pho1 EE rechit enrgy"},
-{"Pho2_hit_X","ECAL X (in cm)", 10,0,200,-160,160,"Pho2 EE rechit x"},
-{"Pho2_hit_Y","ECAL Y (in cm)",10,0,200,-160,160,"Pho2 EE rechit y"},
-{"Pho2_hit_Z","ECAL Z (in cm)",10,0,200,250,350,"Pho2 EE rechit z"},
-{"Pho2_hit_E","Energy (GeV)",10,0,200,0,50,"Pho2 EE rechit enrgy"},
-
-{"Pho1_ES_hit_eta","#eta",10,0,200,-3,3,"Pho1 ES rechit #eta"},
-{"Pho1_ES_hit_phi","#phi",10,0,200,-4,4,"Pho1 ES rechit #phi"},
-{"Pho2_ES_hit_eta","#eta",10,0,200,-3,3,"Pho2 ES rechit #eta"},
-{"Pho2_ES_hit_phi","#phi",10,0,200,-4,4,"Pho2 ES rechit #phi"},
-{"Pho1_ES_hit_X", "X (in cm)",10,0,200,-160,160,"Pho1 ES rechit X"},
-{"Pho1_ES_hit_Y", "Y (in cm)",10,0,200,-160  , 160, "Pho1 ES rechit Y"},
-{"Pho1_ES_hit_Z", "Z (in cm)",10,0,200,250,350,"Pho1 ES rechit Z"},
-{"Pho1_ES_hit_E","Energy (GeV)",10,0,200,0,0.2,"Pho1 ES rechit energy"},
-{"Pho2_ES_hit_X", "X (in cm)",10,0,200,-160,160,"Pho2 ES rechit X"},
-{"Pho2_ES_hit_Y", "Y (in cm)",10,0,200,-160  , 160, "Pho2 ES rechit Y"},
-{"Pho2_ES_hit_Z", "Z (in cm)",10,0,200,250,350,"Pho2 ES rechit Z"},
-{"Pho2_ES_hit_E","Energy (GeV)",10,0,200,0,0.2,"Pho2 ES rechit energy"},
-
-{"Pho_sig_iEiE_Ma_200_300","#sigmai_{i#eta i#eta}",10,0,200,0,0.1,"#sigmai_{i#eta i#eta}"},
-{"Pho_sig_iPhiiPhi" ,"#sigma_{i#phi i#phi}",10,0,200,0,0.1,"#sigma_{i#phi i#phi}"},
-
+{"Gen_H_mass","Mass (GeV)",10,0,20,120,130,"Higgs mass"},
+{"Gen_H_pT" ,"pT (GeV)",10,0,20,0,400,"pT of Higgs"},
+{"Gen_H_eta","#eta",10,0,20,-8,8,"#eta of Higgs"},
+{"Gen_H_phi","#phi",10,0,20,-4,4,"#phi of Higgs"},
+{"Gen_H_E","Energy (GeV)", 10,0,20,0,2000,"Energy of Higgs"},
+{"Gen_H_LB","Lorentz boost (#gamma)",10,0,20,0,30,"Lorentz boost of Higgs"},
+{"A1_mass","Mass (GeV)",10,0,20,0,3,"A1 mass"},
+{"A1_pT","pT (GeV)",10,0,20,0,400,"pT of A1"},
+{"A1_eta","#eta",10,0,20,-8,8,"#eta of A1"},
+{"A1_phi","#phi",10,0,20,-4,4,"#phi of A1"},
+{"A1_E","Energy (GeV)", 10,0,20,0,2000,"Energy of A1"},
+{"A1_LB","Lorentz boost (#gamma)",10,0,20,0,2000,"Lorentz boost of A1"},
+{"A2_mass","Mass (GeV)",10,0,20,0,3,"A2 mass"},
+{"A2_pT","pT (GeV)",10,0,20,0,400,"pT of A2"},
+{"A2_eta","#eta",10,0,20,-8,8,"#eta of A2"},
+{"A2_phi","#phi",10,0,20,-4,4,"#phi of A2"},
+{"A2_E","Energy (GeV)", 10,0,20,0,2000,"Energy of A2"},
+{"A2_LB","Lorentz boost (#gamma)",10,0,20,0,2000,"Lorentz boost of A2"},
+{"Angle_bw_As","Angle betwen As (#theta)",10,0,20,0,4,"Angle betwen As"},
+{"A_EB_pT","pT (GeV)",10,0,20,0,400,"pT of A in ECAL barrel"},
+{"A_EE_pT","pT (GeV)",10,0,20,0,400,"pT of A in ECAL endcaps"},
+{"A_EB_LB","Lorentz boost (#gamma)",10,0,20,0,2000,"#gamma_{A} in ECAL barrel"},
+{"A_EE_LB","Lorentz boost (#gamma)",10,0,20,0,2000,"#gamma_{A} in ECAL endcaps"},
+{"AA_angle_EBEB","Angle between As (#theta)",10,0,20,0,4,"Both As in ECAL barrel"},
+{"AA_angle_EBEE","Angle between As (#theta)",10,0,20,0,4,"One A in EB and one in EE"},
+{"AA_angle_EEEE","Angle between As (#theta)",10,0,20,0,4,"Both As in ECAL endcaps"},
+{"E_ratio_A2_A1","Energy ratio (E_{A2}/E_{A1})",10,0,20,0,20,"Energy ratio"},
+{"Pho1_A1_pt","pT (GeV)",10,0,20,0,400,"Pho1_{A1} pT"},
+{"Pho1_A1_eta","#eta",10,0,20,-8,8,"Pho1_{A1} #eta"},
+{"Pho1_A1_phi","#phi",10,0,20,-4,4,"Pho1_{A1} #phi"},
+{"Pho1_A1_E","Energy (GeV)",10,0,20,0,2000,"Pho1_{A1} energy"},
+{"Pho2_A1_pt","pT (GeV)",10,0,20,0,400,"Pho2_{A1} pT"},
+{"Pho2_A1_eta","#eta",10,0,20,-8,8,"Pho2_{A1} #eta"},
+{"Pho2_A1_phi","#phi",10,0,20,-4,4,"Pho2_{A1} #phi"},
+{"Pho2_A1_E","Energy (GeV)",10,0,20,0,2000,"Pho2_{A1} energy"},
+{"Pho1_A2_pt","pT (GeV)",10,0,20,0,400,"Pho1_{A2} pT"},
+{"Pho1_A2_eta","#eta",10,0,20,-8,8,"Pho1_{A2} #eta"},
+{"Pho1_A2_phi","#phi",10,0,20,-4,4,"Pho1_{A2} #phi"},
+{"Pho1_A2_E","Energy (GeV)",10,0,20,0,2000,"Pho1_{A2} energy"},
+{"Pho2_A2_pt","pT (GeV)",10,0,20,0,400,"Pho2_{A2} pT"},
+{"Pho2_A2_eta","#eta",10,0,20,-8,8,"Pho2_{A2} #eta"},
+{"Pho2_A2_phi","#phi",10,0,20,-4,4,"Pho2_{A2} #phi"},
+{"Pho2_A2_E","Energy (GeV)",10,0,20,0,2000,"Pho2_{A2} energy"},
+{"A1_pho1_by_pho2_pt","pT ratio (pT_{pho2}/pT_{pho1}",10,0,20,0,20,"A1 photon pT ratio"},
+{"A1_pho1_by_pho2_E","E ratio (E_{pho2}/E_{pho1})",10,0,20,0,20,"A1 photon energy ratio"},
+{"A1_pho1_pho2_angle","Angle between photons (#theta)",10,0,20,0,4,"Opening angle of photons (A1)"},
+{"A2_pho1_by_pho2_pt","pT ratio (pT_{pho2}/pT_{pho1}",10,0,20,0,20,"A2 photon pT ratio"},
+{"A2_pho1_by_pho2_E","E ratio (E_{pho2}/E_{pho1})",10,0,20,0,20,"A2 photon energy ratio"},
+{"A2_pho1_pho2_angle","Angle between photons (#theta)",10,0,20,0,4,"Opening angle of photons (A2)"},
+{"A_EB_pho_angle","Angle between photons (#theta)",10,0,20,0,4,"As in ECAL barrel" },
+{"A_EE_pho_angle","Angle between photons (#theta)",10,0,20,0,4,"As in ECAL endcaps"},
+{"A_EB_hit_X","X (in cm)",10,0,20,-160,160,"EB rechits"},
+{"A_EB_hit_Y","Y (in cm)",10,0,20,-160,160,"EB rechits"},
+{"A_EB_hit_eta","#eta",10,0,20,-2,2,"EB rechits"},
+{"A_EB_hit_phi","#phi",10,0,20,-4,4,"EB rechits"},
+{"A_EE_hit_x","X (in cm)",10,0,20,-160,160,"EE rechits"},
+{"A_EE_hit_y","Y (in cm)",10,0,20,-160,160,"EE rechits"},
+{"A_EE_hit_eta","#eta",10,0,20,-3,3,"EE rechits"},
+{"A_EE_hit_phi","#phi",10,0,20,-4,4,"EE rechits"},
+{"Tot_unc_E","Energy (GeV)", 10,0,20,0,2000,"Total unclustered energy"},
+{"Tot_unc_E_eb","Energy (GeV)",10,0,20,0,2000,"Total unclustered energy (in EB)"},
+{"Tot_unc_E_ee","Energy (GeV)", 10,0,20,0,2000,"Total unclustered energy (in EE)"},
 
 };
 
 
-  vector<string>GEN ={"M_gen","A_gen_pT","A_gen_eta","A_gen_phi","A_gen_energy","Lorentz boost of A","No. of gen photons","Photon1 gen eta","Photon1 gen phi","Photon1 gen pT","Photon1 gen E",
-   "Photon2 gen eta","Photon2 gen phi","Photon2 gen pT","Photon2 gen E","E_sublead_by_E_lead","E_pho2_by_E_pho1"}  ; 
-                  
-  vector<string> loghist  ={"Lorentz boost of A","E_pho2_by_E_pho1","Pho1_hit_E","Pho2_hit_E","Pho1_ES_hit_E","Pho2_ES_hit_E"} ;                                                                                                              
+//  vector<string>GEN ={"Gen_H_mass","Gen_H_pT","Gen_H_eta","Gen_H_phi","Gen_H_E","Gen_H_LB","A_EB_pho_angle","A_EE_pho_angle","A1_mass","A1_pT","A1_eta","A1_phi","A1_E","A1_LB","A2_mass","A2_pT","A2_eta","A2_phi","A2_E","A2_LB","A_EB_pT","A_EE_pT","A_EB_LB", "A_EE_LB","AA_angle_EBEB","AA_angle_EBEE","AA_angle_EEEE","A_EB_pho_angle","A_EE_pho_angle","Angle_bw_As","E_ratio_A2_A1","Pho1_A1_pt","Pho1_A1_eta", "Pho1_A1_phi","Pho1_A1_E","Pho2_A1_pt","Pho2_A1_eta","Pho2_A1_phi","Pho2_A1_E","Pho1_A2_pt", "Pho1_A2_eta","Pho1_A2_phi","Pho1_A2_E","Pho2_A2_pt","Pho2_A2_eta","Pho2_A2_phi","Pho2_A2_E","A1_pho1_by_pho2_pt","A1_pho1_by_pho2_E","A1_pho1_pho2_angle","A2_pho1_pho2_angle"}  ; 
+  vector <string> Reco={"A_EB_hit_X","A_EB_hit_Y","A_EB_hit_eta","A_EB_hit_phi","A_EE_hit_x","A_EE_hit_y","A_EE_hit_eta","A_EE_hit_phi","Tot_unc_E","Tot_unc_E_eb","Tot_unc_E_ee"};
 
+                
+  vector<string> loghist  ={"Gen_H_E","Gen_H_LB","A_EB_pho_angle","A_EE_pho_angle","A1_E","A1_LB","A2_E","A2_LB","AA_angle_EBEB","AA_angle_EBEE","AA_angle_EEEE","A_EB_pho_angle","A_EE_pho_angle","Angle_bw_As","Pho1_A1_E","Pho2_A1_E","Pho1_A2_E","Pho2_A2_E","A1_pho1_pho2_angle","A2_pho1_pho2_angle","A1_pho1_by_pho2_pt","A1_pho1_by_pho2_E","A2_pho1_by_pho2_pt","A2_pho1_by_pho2_E","A_EB_LB","A_EE_LB","Tot_unc_E","Tot_unc_E_eb","Tot_unc_E_ee"} ;                                                                                                              
 
+vector<string> with_stat ={"AA_angle_EBEE","AA_angle_EEEE","AA_angle_EBEB"};
   bool flag=false;
  
   sprintf(hname,"temp.root");
@@ -347,17 +377,24 @@ MixedData varName[] = { // { Name of the plot , xLabel , rebin , ymin , ymax , x
           oss << std::setw(4) << std::setfill('0') << i_cut <<hist_name;
           string hst_name = oss.str();
 
-          int gen = count(GEN.begin(),GEN.end(),varName[i_cut].str1);
+          //int gen = count(GEN.begin(),GEN.end(),varName[i_cut].str1);
+          int reco = count(Reco.begin(),Reco.end(),varName[i_cut].str1);
 	  int LOG = count(loghist.begin(), loghist.end(),varName[i_cut].str1);
-          if(gen){hst_name = "GEN_"+hst_name;}
-          else {hst_name = "RECO_" + hst_name;}
-	  if(LOG){generate_1Dplot(hist_list,hst_name.c_str(),xLabel.c_str(),"Entries",rebin,ymin,ymax,xmin,xmax,leg_head,false,true,false,true,filetag[i_file].c_str(),legend_texts);
-	  }
-	  else {
+	  int Stat = count(with_stat.begin(),with_stat.end(),varName[i_cut].str1);
+
+          //if(gen){hst_name = "GEN_"+hst_name;}
+          if(!reco){hst_name = "GEN_"+hst_name;}
+	  else {hst_name = "RECO_" + hst_name;}
+	  
 generate_1Dplot(hist_list,hst_name.c_str(),xLabel.c_str(),"Entries",rebin,ymin,ymax,xmin,xmax,leg_head,false,false,false,true,filetag[i_file].c_str(),legend_texts);
-          }
-	}
-      //fout->Close();
+	  if(Stat){string hst_name3=hst_name +  "_stat";
+ generate_1Dplot(hist_list,hst_name3.c_str(),xLabel.c_str(),"Entries",rebin,ymin,ymax,xmin,xmax,leg_head,false,false,false,true,filetag[i_file].c_str(),legend_texts,true);}
+	  if(LOG && Stat){string hst_name1=hst_name + "_logY" + "_stat";
+generate_1Dplot(hist_list,hst_name1.c_str(),xLabel.c_str(),"Entries",rebin,ymin,ymax,xmin,xmax,leg_head,false,true,false,true,filetag[i_file].c_str(),legend_texts,true);}
+	  else if(LOG && !Stat){string hst_name2=hst_name + "_logY";
+ generate_1Dplot(hist_list,hst_name2.c_str(),xLabel.c_str(),"Entries",rebin,ymin,ymax,xmin,xmax,leg_head,false,true,false,true,filetag[i_file].c_str(),legend_texts);}
+	  	  }
+	        //fout->Close();
       
     }
     }

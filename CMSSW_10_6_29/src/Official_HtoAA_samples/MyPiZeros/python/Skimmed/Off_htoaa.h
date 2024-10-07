@@ -1,43 +1,31 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Aug 16 18:22:34 2018 by ROOT version 6.06/01
-// from TTree hits/HGC rechits
-// found on file: muon_v10.root
+// Thu Sep 12 13:11:07 2024 by ROOT version 6.32.04
+// from TTree T/MyTuple
+// found on file: 42E324BA-45F1-EA11-B48C-E0071B7A25E0.root
 //////////////////////////////////////////////////////////
 
-#ifndef HGCNtupleVariables_h
-#define HGCNtupleVariables_h
+#ifndef Off_htoaa_h
+#define Off_htoaa_h
 
+#include <TROOT.h>
 #include <TChain.h>
 #include <TFile.h>
-#include <TROOT.h>
 
 // Header file for the classes stored in the TTree if any.
 #include "vector"
+#include "vector"
+#include "vector"
 
-using namespace std;
+class Off_htoaa {
+public :
+   TTree          *fChain;   //!pointer to the analyzed TTree or TChain
+   Int_t           fCurrent; //!current Tree number in a TChain
 
-class HGCNtupleVariables {
-public:
-  HGCNtupleVariables(TTree * /*tree*/ = 0) : fChain(0) {}
-  ~HGCNtupleVariables() {}
-  // void    Init(TTree *tree);
-  void Init(TTree *tree, TTree *tree2);
-  Bool_t Notify();
-  Int_t GetEntry(Long64_t entry, Int_t getall = 0) {
-    return fChain ? fChain->GetTree()->GetEntry(entry, getall) : 0;
-  }
+// Fixed size dimensions of array or collections stored in the TTree if any.
 
-  TTree *fChain;   //! pointer to the analyzed TTree or TChain
-  TTree *fChain2;  //! pointer to the analyzed TTree or TChain
-  Int_t fCurrent;  //! current Tree number in a TChain
-  Int_t fCurrent2; //! current Tree number in a TChain
-
-  // Fixed size dimensions of array or collections stored in the TTree if any.
-
-  // Declaration of leaf types
-  //
-vector<float>   *iEtaPho1;
+   // Declaration of leaf types
+   vector<float>   *iEtaPho1;
    vector<float>   *iPhiPho1;
    vector<float>   *Hit_ES_Eta_Pho1;
    vector<float>   *Hit_ES_Phi_Pho1;
@@ -254,9 +242,10 @@ vector<float>   *iEtaPho1;
    Float_t         rho;
    Int_t           run;
    Int_t           event;
-   Int_t           lumi;   
-// List of branches
- TBranch        *b_iEtaPho1;   //!
+   Int_t           lumi;
+
+   // List of branches
+   TBranch        *b_iEtaPho1;   //!
    TBranch        *b_iPhiPho1;   //!
    TBranch        *b_Hit_ES_Eta_Pho1;   //!
    TBranch        *b_Hit_ES_Phi_Pho1;   //!
@@ -474,22 +463,73 @@ vector<float>   *iEtaPho1;
    TBranch        *b_run;   //!
    TBranch        *b_event;   //!
    TBranch        *b_lumi;   //!
-}; //Modified by Somanko
+
+   Off_htoaa(TTree *tree=0);
+   virtual ~Off_htoaa();
+   virtual Int_t    Cut(Long64_t entry);
+   virtual Int_t    GetEntry(Long64_t entry);
+   virtual Long64_t LoadTree(Long64_t entry);
+   virtual void     Init(TTree *tree);
+   virtual void     Loop();
+   virtual bool     Notify();
+   virtual void     Show(Long64_t entry = -1);
+};
 
 #endif
 
-#ifdef HGCNtupleVariables_cxx
+#ifdef Off_htoaa_cxx
+Off_htoaa::Off_htoaa(TTree *tree) : fChain(0) 
+{
+// if parameter tree is not specified (or zero), connect the file
+// used to generate this class and read the Tree.
+   if (tree == 0) {
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("42E324BA-45F1-EA11-B48C-E0071B7A25E0.root");
+      if (!f || !f->IsOpen()) {
+         f = new TFile("42E324BA-45F1-EA11-B48C-E0071B7A25E0.root");
+      }
+      TDirectory * dir = (TDirectory*)f->Get("42E324BA-45F1-EA11-B48C-E0071B7A25E0.root:/nTuplelize");
+      dir->GetObject("T",tree);
 
-void HGCNtupleVariables::Init(TTree *tree, TTree *tree2) {
-  // The Init() function is called when the selector needs to initialize
-  // a new tree or chain. Typically here the branch addresses and branch
-  // pointers of the tree will be set.
-  // It is normally not necessary to make changes to the generated
-  // code, but the routine can be extended by the user if needed.
-  // Init() will be called many times when running on PROOF
-  // (once per file to be processed).
+   }
+   Init(tree);
+}
 
-  // Set object pointer
+Off_htoaa::~Off_htoaa()
+{
+   if (!fChain) return;
+   delete fChain->GetCurrentFile();
+}
+
+Int_t Off_htoaa::GetEntry(Long64_t entry)
+{
+// Read contents of entry.
+   if (!fChain) return 0;
+   return fChain->GetEntry(entry);
+}
+Long64_t Off_htoaa::LoadTree(Long64_t entry)
+{
+// Set the environment to read one entry
+   if (!fChain) return -5;
+   Long64_t centry = fChain->LoadTree(entry);
+   if (centry < 0) return centry;
+   if (fChain->GetTreeNumber() != fCurrent) {
+      fCurrent = fChain->GetTreeNumber();
+      Notify();
+   }
+   return centry;
+}
+
+void Off_htoaa::Init(TTree *tree)
+{
+   // The Init() function is called when the selector needs to initialize
+   // a new tree or chain. Typically here the branch addresses and branch
+   // pointers of the tree will be set.
+   // It is normally not necessary to make changes to the generated
+   // code, but the routine can be extended by the user if needed.
+   // Init() will be called many times when running on PROOF
+   // (once per file to be processed).
+
+   // Set object pointer
    iEtaPho1 = 0;
    iPhiPho1 = 0;
    Hit_ES_Eta_Pho1 = 0;
@@ -703,227 +743,13 @@ void HGCNtupleVariables::Init(TTree *tree, TTree *tree2) {
    A_sublead_Pho_Gen_Eta = 0;
    A_sublead_Pho_Gen_Phi = 0;
    A_sublead_Pho_Gen_E = 0;
-// Set branch addresses and branch pointers
-  //Modified by Somanko
-   iEtaPho1 = 0;
-   iPhiPho1 = 0;
-   Hit_ES_Eta_Pho1 = 0;
-   Hit_ES_Phi_Pho1 = 0;
-   Hit_ES_X_Pho1 = 0;
-   Hit_ES_Y_Pho1 = 0;
-   Hit_ES_Z_Pho1 = 0;
-   ES_RecHitEnPho1 = 0;
-   Hit_Eta_Pho1 = 0;
-   Hit_Phi_Pho1 = 0;
-   Hit_X_Pho1 = 0;
-   Hit_Y_Pho1 = 0;
-   Hit_Z_Pho1 = 0;
-   RecHitEnPho1 = 0;
-   RecHitFracPho1 = 0;
-   RecHitGain1 = 0;
-   RecHitQuality1 = 0;
-   HitNoisePho1 = 0;
-   dRHit_Eta_Pho1 = 0;
-   dRHit_Phi_Pho1 = 0;
-   RawHit_Eta_Pho1 = 0;
-   RawHit_Phi_Pho1 = 0;
-   RawRecHitEnPho1 = 0;
-   dRHit_X_Pho1 = 0;
-   dRHit_Y_Pho1 = 0;
-   dRHit_Z_Pho1 = 0;
-   dRRecHitEnPho1 = 0;
-   dRRecHitFracPho1 = 0;
-   dRHit_Eta_Pho2 = 0;
-   dRHit_Phi_Pho2 = 0;
-   dRHit_X_Pho2 = 0;
-   dRHit_Y_Pho2 = 0;
-   dRHit_Z_Pho2 = 0;
-   dRRecHitEnPho2 = 0;
-   dRRecHitFracPho2 = 0;
-   RecHitFlag_kGood_pho1 = 0;
-   RecHitFlag_kPoorReco_pho1 = 0;
-   RecHitFlag_kOutOfTime_pho1 = 0;
-   RecHitFlag_kFaultyHardware_pho1 = 0;
-   RecHitFlag_kNoisy_pho1 = 0;
-   RecHitFlag_kPoorCalib_pho1 = 0;
-   RecHitFlag_kSaturated_pho1 = 0;
-   RecHitFlag_kLeadingEdgeRecovered_pho1 = 0;
-   RecHitFlag_kNeighboursRecovered_pho1 = 0;
-   RecHitFlag_kTowerRecovered_pho1 = 0;
-   RecHitFlag_kDead_pho1 = 0;
-   RecHitFlag_kKilled_pho1 = 0;
-   RecHitFlag_kTPSaturated_pho1 = 0;
-   RecHitFlag_kL1SpikeFlag_pho1 = 0;
-   RecHitFlag_kWeird_pho1 = 0;
-   RecHitFlag_kDiWeird_pho1 = 0;
-   RecHitFlag_kHasSwitchToGain6_pho1 = 0;
-   RecHitFlag_kHasSwitchToGain1_pho1 = 0;
-   RecHitFlag_kESGood_pho1 = 0;
-   RecHitFlag_kESDead_pho1 = 0;
-   RecHitFlag_kESHot_pho1 = 0;
-   RecHitFlag_kESPassBX_pho1 = 0;
-   RecHitFlag_kESTwoGoodRatios_pho1 = 0;
-   RecHitFlag_kESBadRatioFor12_pho1 = 0;
-   RecHitFlag_kESBadRatioFor23Upper_pho1 = 0;
-   RecHitFlag_kESBadRatioFor23Lower_pho1 = 0;
-   RecHitFlag_kESTS1Largest_pho1 = 0;
-   RecHitFlag_kESTS3Largest_pho1 = 0;
-   RecHitFlag_kESTS3Negative_pho1 = 0;
-   RecHitFlag_kESSaturated_pho1 = 0;
-   RecHitFlag_kESTS2Saturated_pho1 = 0;
-   RecHitFlag_kESTS3Saturated_pho1 = 0;
-   RecHitFlag_kESTS13Sigmas_pho1 = 0;
-   RecHitFlag_kESTS15Sigmas_pho1 = 0;
-   iEtaPho2 = 0;
-   iPhiPho2 = 0;
-   Hit_ES_Eta_Pho2 = 0;
-   Hit_ES_Phi_Pho2 = 0;
-   Hit_ES_X_Pho2 = 0;
-   Hit_ES_Y_Pho2 = 0;
-   Hit_ES_Z_Pho2 = 0;
-   ES_RecHitEnPho2 = 0;
-   Hit_Eta_Pho2 = 0;
-   Hit_Phi_Pho2 = 0;
-   Hit_X_Pho2 = 0;
-   Hit_Y_Pho2 = 0;
-   Hit_Z_Pho2 = 0;
-   RecHitEnPho2 = 0;
-   RecHitFracPho2 = 0;
-   RecHitGain2 = 0;
-   RecHitQuality2 = 0;
-   HitNoisePho2 = 0;
-   RecHitFlag_kGood_pho2 = 0;
-   RecHitFlag_kPoorReco_pho2 = 0;
-   RecHitFlag_kOutOfTime_pho2 = 0;
-   RecHitFlag_kFaultyHardware_pho2 = 0;
-   RecHitFlag_kNoisy_pho2 = 0;
-   RecHitFlag_kPoorCalib_pho2 = 0;
-   RecHitFlag_kSaturated_pho2 = 0;
-   RecHitFlag_kLeadingEdgeRecovered_pho2 = 0;
-   RecHitFlag_kNeighboursRecovered_pho2 = 0;
-   RecHitFlag_kTowerRecovered_pho2 = 0;
-   RecHitFlag_kDead_pho2 = 0;
-   RecHitFlag_kKilled_pho2 = 0;
-   RecHitFlag_kTPSaturated_pho2 = 0;
-   RecHitFlag_kL1SpikeFlag_pho2 = 0;
-   RecHitFlag_kWeird_pho2 = 0;
-   RecHitFlag_kDiWeird_pho2 = 0;
-   RecHitFlag_kHasSwitchToGain6_pho2 = 0;
-   RecHitFlag_kHasSwitchToGain1_pho2 = 0;
-   RecHitFlag_kESGood_pho2 = 0;
-   RecHitFlag_kESDead_pho2 = 0;
-   RecHitFlag_kESHot_pho2 = 0;
-   RecHitFlag_kESPassBX_pho2 = 0;
-   RecHitFlag_kESTwoGoodRatios_pho2 = 0;
-   RecHitFlag_kESBadRatioFor12_pho2 = 0;
-   RecHitFlag_kESBadRatioFor23Upper_pho2 = 0;
-   RecHitFlag_kESBadRatioFor23Lower_pho2 = 0;
-   RecHitFlag_kESTS1Largest_pho2 = 0;
-   RecHitFlag_kESTS3Largest_pho2 = 0;
-   RecHitFlag_kESTS3Negative_pho2 = 0;
-   RecHitFlag_kESSaturated_pho2 = 0;
-   RecHitFlag_kESTS2Saturated_pho2 = 0;
-   RecHitFlag_kESTS3Saturated_pho2 = 0;
-   RecHitFlag_kESTS13Sigmas_pho2 = 0;
-   RecHitFlag_kESTS15Sigmas_pho2 = 0;
-   iEtaPho3 = 0;
-   iPhiPho3 = 0;
-   Hit_ES_Eta_Pho3 = 0;
-   Hit_ES_Phi_Pho3 = 0;
-   Hit_ES_X_Pho3 = 0;
-   Hit_ES_Y_Pho3 = 0;
-   Hit_ES_Z_Pho3 = 0;
-   ES_RecHitEnPho3 = 0;
-   Hit_Eta_Pho3 = 0;
-   Hit_Phi_Pho3 = 0;
-   Hit_X_Pho3 = 0;
-   Hit_Y_Pho3 = 0;
-   Hit_Z_Pho3 = 0;
-   RecHitEnPho3 = 0;
-   RecHitFracPho3 = 0;
-   RecHitGain3 = 0;
-   RecHitQuality3 = 0;
-   HitNoisePho3 = 0;
-   iEtaPho4 = 0;
-   iPhiPho4 = 0;
-   Hit_ES_Eta_Pho4 = 0;
-   Hit_ES_Phi_Pho4 = 0;
-   Hit_ES_X_Pho4 = 0;
-   Hit_ES_Y_Pho4 = 0;
-   Hit_ES_Z_Pho4 = 0;
-   ES_RecHitEnPho4 = 0;
-   Hit_Eta_Pho4 = 0;
-   Hit_Phi_Pho4 = 0;
-   Hit_X_Pho4 = 0;
-   Hit_Y_Pho4 = 0;
-   Hit_Z_Pho4 = 0;
-   RecHitEnPho4 = 0;
-   RecHitFracPho4 = 0;
-   RecHitGain4 = 0;
-   RecHitQuality4 = 0;
-   HitNoisePho4 = 0;
-   A_flags = 0;
-   pt = 0;
-   eta = 0;
-   phi = 0;
-   Pho_cluster_seed_x = 0;
-   Pho_cluster_seed_y = 0;
-   Pho_cluster_seed_z = 0;
-   Pho_cluster_seed_eta = 0;
-   Pho_cluster_seed_phi = 0;
-   energy = 0;
-   energy_ecal_mustache = 0;
-   passMediumId = 0;
-   passTightId = 0;
-   passMVAMediumId = 0;
-   Pho_R9 = 0;
-   Pho_S4 = 0;
-   Pho_SigIEIE = 0;
-   Pho_SigIPhiIPhi = 0;
-   Pho_SCEtaW = 0;
-   Pho_SCPhiW = 0;
-   Pho_CovIEtaIEta = 0;
-   Pho_CovIEtaIPhi = 0;
-   Pho_ESSigRR = 0;
-   Pho_SCRawE = 0;
-   Pho_SC_ESEnByRawE = 0;
-   Pho_HadOverEm = 0;
-   Pho_PFChIso = 0;
-   Pho_PFChPVIso = 0;
-   Pho_PFPhoIso = 0;
-   Pho_PFNeuIso = 0;
-   Pho_PFChWorstVetoIso = 0;
-   Pho_PFChWorstIso = 0;
-   Pho_EcalPFClusterIso = 0;
-   Pho_HcalPFClusterIso = 0;
-   Pho_CorrectedEnergy = 0;
-   Pho_CorrectedEnergyError = 0;
-   A_lead_Gen_mass = 0;
-   A_lead_Gen_pt = 0;
-   A_lead_Gen_eta = 0;
-   A_lead_Gen_phi = 0;
-   A_sublead_Gen_mass = 0;
-   A_sublead_Gen_pt = 0;
-   A_sublead_Gen_eta = 0;
-   A_sublead_Gen_phi = 0;
-   H_Gen_mass = 0;
-   H_Gen_pt = 0;
-   H_Gen_eta = 0;
-   H_Gen_phi = 0;
-   A_lead_Pho_Gen_Pt = 0;
-   A_lead_Pho_Gen_Eta = 0;
-   A_lead_Pho_Gen_Phi = 0;
-   A_lead_Pho_Gen_E = 0;
-   A_sublead_Pho_Gen_Pt = 0;
-   A_sublead_Pho_Gen_Eta = 0;
-   A_sublead_Pho_Gen_Phi = 0;
-   A_sublead_Pho_Gen_E = 0;
-// Set branch addresses and branch pointers
+   // Set branch addresses and branch pointers
    if (!tree) return;
    fChain = tree;
    fCurrent = -1;
    fChain->SetMakeClass(1);
-fChain->SetBranchAddress("iEtaPho1", &iEtaPho1, &b_iEtaPho1);
+
+   fChain->SetBranchAddress("iEtaPho1", &iEtaPho1, &b_iEtaPho1);
    fChain->SetBranchAddress("iPhiPho1", &iPhiPho1, &b_iPhiPho1);
    fChain->SetBranchAddress("Hit_ES_Eta_Pho1", &Hit_ES_Eta_Pho1, &b_Hit_ES_Eta_Pho1);
    fChain->SetBranchAddress("Hit_ES_Phi_Pho1", &Hit_ES_Phi_Pho1, &b_Hit_ES_Phi_Pho1);
@@ -1141,29 +967,32 @@ fChain->SetBranchAddress("iEtaPho1", &iEtaPho1, &b_iEtaPho1);
    fChain->SetBranchAddress("run", &run, &b_run);
    fChain->SetBranchAddress("event", &event, &b_event);
    fChain->SetBranchAddress("lumi", &lumi, &b_lumi);
-  if (!tree)
-    return;
-  Notify();
-  return;
-  // End of modification by Somanko
-  //  Set branch addresses and branch pointers
-  if (!tree2)
-    return;
-  fChain2 = tree2;
-  fCurrent2 = -1;
-  fChain2->SetMakeClass(1);
-
-  Notify();
+   Notify();
 }
 
-Bool_t HGCNtupleVariables::Notify() {
-  // The Notify() function is called when a new file is opened. This
-  // can be either for a new TTree in a TChain or when when a new TTree
-  // is started when using PROOF. It is normally not necessary to make changes
-  // to the generated code, but the routine can be extended by the
-  // user if needed. The return value is currently not used.
+bool Off_htoaa::Notify()
+{
+   // The Notify() function is called when a new file is opened. This
+   // can be either for a new TTree in a TChain or when when a new TTree
+   // is started when using PROOF. It is normally not necessary to make changes
+   // to the generated code, but the routine can be extended by the
+   // user if needed. The return value is currently not used.
 
-  return kTRUE;
+   return true;
 }
 
-#endif // #ifdef HGCNtupleVariables_cxx
+void Off_htoaa::Show(Long64_t entry)
+{
+// Print contents of entry.
+// If entry is not specified, print current entry
+   if (!fChain) return;
+   fChain->Show(entry);
+}
+Int_t Off_htoaa::Cut(Long64_t entry)
+{
+// This function may be called from Loop.
+// returns  1 if entry is accepted.
+// returns -1 otherwise.
+   return 1;
+}
+#endif // #ifdef Off_htoaa_cxx

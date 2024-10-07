@@ -150,10 +150,10 @@ const int nfiles=100;
 TFile *f[nfiles];
 
 struct MixedData {
-     string str1;
-     string str2;
-     string str3;
-     string str4;
+     std::string str1;
+     std::string str2;
+     std::string str3;
+     std::string str4;
      int intData;
      double double1;
      double double2;
@@ -181,47 +181,28 @@ void generate2Dplot()
    //vector<vector<string>> legend_texts;  
     //legend_texts ={{"EE_XY_occupancy"}};
 
-MixedData varName[] = {
-{"A gen mass vs pt","A gen m vs pt","mass (GeV)", "pT (GeV)",10,0,120,0,2.1},
-{"Gen_eta1_vs_eta2","Gen #eta1 vs #eta2", "#eta1", "#eta2",10,-3,3,-3,3},
-{"E_pho1_vs_E_pho2"," Energy of photons" ,"E_pho1 (GeV)", "E_pho2 (GeV)",10,0,800,0,800},
-{"Angle vs gamma (240<= Ma <=260)","Angle vs Lorentz boost (240<= Ma <=260 MeV)" , "Lorentz boost (#gamma)","Angle",10,0,0.22,1,3000},
-{"Angle vs gamma (490<= Ma <=510)","Angle vs Lorentz boost (490<= Ma <=510 MeV)","Lorentz boost (#gamma)","Angle",10,0,0.22,1,3000},
-{"Angle vs gamma (740<= Ma <=760)","Angle vs Lorentz boost (740<= Ma <=760 MeV)","Lorentz boost (#gamma)","Angle",10,0,0.22,1,3000},
-{"Angle vs gamma (990<= Ma <=1010)","Angle vs Lorentz boost (990<= Ma <=1010 MeV)","Lorentz boost (#gamma)","Angle",10,0,0.22,1,3000},
-{"EE_XY_occupancy","ECAL Rechits (X-Y plane)", "X (in cm)", "Y (in cm)",10,-160,160,-160,160},
-{"EE_XY_rechits_En_weighed", "ECAL rechits (X-Y plane) weighed by energy","X (in cm)", "Y (in cm)",10,-160,160,-160,160},
-{"EE_eta_phi_occu","ECAL rechits (#eta-#phi plane)","|#eta|","#phi",10,-3.5,3.5,1,3.5},
-{"EE_eta_phi_occu_En_weigh","ECAL rechits (#eta-#phi plane) weighed by energy","|#eta|","#phi",10,-3.5,3.5,1,3.5},
-
+MixedData varName[] = { //{hist_name,Title,xlabel,ylabel,rebin,ymin,ymax,xmin,xmax}
+{"A1_eta_A2_eta","#eta_{A1} vs #eta_{A2}","#eta_{A1}","#eta_{A2}",10,-8,8,-8,8},
+{"A1_pt_A2_pt", "pT_{A1} vs pT_{A2}","pT_{A1} (GeV)","pT_{A2} (GeV)",10,0,400,0,400},
+{"A1_p_A2_p","p_{A1} vs p_{A2}","p_{A1} (GeV)","p_{A2} (GeV)",10,0,2000,0,2000},
+{"A1_mass_A2_mass","M_{A1} vs M_{A2}","M_{A1} (GeV)","M_{A2} (GeV)",10,0,3,0,3},
+{"A1_pho_eta1_eta2", "A1 #eta_{pho1} vs #eta_{pho2}","#eta_{pho1}","#eta_{pho2}",10,-8,8,-8,8},
+{"A2_pho_eta1_eta2","A2 #eta_{pho1} vs #eta_{pho2}","#eta_{pho1}","#eta_{pho2}",10,-8,8,-8,8},
+{"A1_pho_p1_p2","A1 p_{pho1} vs p_{pho2}","p_{pho1} (GeV)","p_{pho2} (GeV)",10,0,2000,0,2000},
+{"A2_pho_p1_p2","A2 p_{pho1} vs p_{pho2}","p_{pho1} (GeV)","p_{pho2} (GeV)",10,0,2000,0,2000},
+{"A_EB_hit_eta_phi","EB rechit (#eta-#phi plane)","#eta","#phi",10,-4,4,-2,2},
+{"A_EB_hit_xy","EB rechit (X-Y plane)","X (in cm)","Y (in cm)",10,-160,160,-160,160},
+{"A_EB_hit_eta_phi_En","EB rechits (#eta-#phi plane) weighed by energy","#eta","#phi",10,-4,4,-2,2},
+{"A_EB_hit_xy_En","EB rechit (X-Y plane) weighed by energy","X (in cm)","Y (in cm)",10,-160,160,-160,160},
+{"A_EE_hit_eta_phi","EE rechit (#eta-#phi plane)","#eta","#phi",10,-4,4,3,-3},
+{"A_EE_hit_xy","EE rechit (X-Y plane)","X (in cm)","Y (in cm)",10,-160,160,-160,160},
+{"A_EE_hit_eta_phi_En","EE rechit (#eta-#phi plane) weighed by energy","#eta","#phi",10,-4,4,-3,3},
+{"A_EE_hit_xy_En","EE rechit (X-Y plane) weighed by energy","X (in cm)","Y (in cm)",10,-160,160,-160,160},
 
 };
-/*  vector<string> varName;
- 
-   varName = {"A gen mass vs pt","A gen eta vs phi","Gen #eta1 vs #eta2","E_pho1_vs_E_pho2","Angle vs gamma (240<= Ma <=260)","Angle vs gamma (490<= Ma <=510)",
-   "Angle vs gamma (740<= Ma <=760)","Angle vs gamma (990<= Ma <=1010)","EE_XY_occupancy","EE_XY_rechits_En_weighed","EE_eta_phi_occu","EE_eta_phi_occu_En_weigh" };    
-*/
-   vector<string> GEN ={"A gen mass vs pt","A gen eta vs phi","Gen #eta1 vs #eta2","E_pho1_vs_E_pho2","Angle vs gamma (240<= Ma <=260)","Angle vs gamma (490<= Ma <=510)",
-   "Angle vs gamma (740<= Ma <=760)","Angle vs gamma (990<= Ma <=1010)"} ;                 
-  /* vector <string>  xLabel;
+//cout<<varName[0].str1<<endl;
+   vector<string> GEN ={"A1_eta_A2_eta","A1_pt_A2_pt","A1_p_A2_p","A1_mass_A2_mass","A1_pho_eta1_eta2","A2_pho_eta1_eta2","A1_pho_p1_p2","A2_pho_p1_p2"};                 
 
-  xLabel={"Mass (GeV)","|#eta|","#eta1","Energy (GeV)","Lorentz boost (#gamma)","Lorentz boost (#gamma)","Lorentz boost (#gamma)","Lorentz boost (#gamma)","X (in cm)","X (in cm)","|#eta|","|#eta|" };  
-  vector<string> yLabel;
-  yLabel={"pT (GeV)","#phi","#eta2","Energy","Angle","Angle","Angle","Angle","Y (in cm)","Y (in cm)","#phi", "#phi"};
-   vector<string> Title;
-   Title = {"Mass vs pT of A","#eta vs #phi of A","#eta1 vs #eta2","E_pho1 vs E_pho2","Ma = 0.24-0.26 GeV","Ma = 0.49-0.51 GeV","Ma = 0.74-0.76 GeV",
-   "Ma = 0.99-1.01 GeV","EE XY occupancy","EE XY rechits weighed by energy","EE rechits (#eta-#phi)","EE rechits(#eta-#phi) weighed by energy"}; */
-  /*vector <int> rebin;
-  rebin={10,10,10,5,5,5,5,10,9,9,10,10};
-
-  vector<double> ymin ={0,  -4,   -3,       0,   0,    0,    0,       0,    -160,   -160,   -3.5 ,  3.5};
-  vector<double> ymax={120  ,4,    3,     800,   0.2,  0.2,  0.2,     0.2,   160,    160,    3.5 ,  3.5};
-  vector<double> xmin ={0,  1.1,  -3,       0,   0,    0,    0,       0,     -160,   -160,     1 ,  1};
-  vector<double> xmax={3,   3,     3,     800,   2500, 2500, 2500,    2500,   160,    160,    4,  4};
-
-  cout<<"different vector sizes "<<endl;
-  cout<<varName.size()<<"\t"<<xLabel.size()<<"\t"<<rebin.size()<<"\t"<<xmax.size()<<"\t"<<xmin.size()<<endl;
-  cout <<xLabel[0]<<endl;*/
   vector<string> loghist  ={""} ;                                                                                                              
 
   bool flag=false;

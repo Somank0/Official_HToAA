@@ -1,0 +1,2 @@
+ALL_PACKAGES += Official_HtoAA_samples/MyPiZeros
+subdirs_src_Official_HtoAA_samples_MyPiZeros := src_Official_HtoAA_samples_MyPiZeros_plugins src_Official_HtoAA_samples_MyPiZeros_python src_Official_HtoAA_samples_MyPiZeros_test

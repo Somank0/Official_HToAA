@@ -47,7 +47,7 @@ endif
 endif
 LIBTYPE:= 
 
-subdirs_src+=$(filter-out Documentation, src_MySampleProduction)
+subdirs_src+=$(filter-out Documentation, src_Official_HtoAA_samples)
 
 COND_SERIALIZATION:=$(SCRAM_SOURCEDIR)/CondFormats/Serialization/python/condformats_serialization_generate.py
 ALL_EXTRA_PRODUCT_RULES+=LCG

@@ -1,2 +1,0 @@
-ALL_SUBSYSTEMS+=MySampleProduction
-subdirs_src_MySampleProduction = src_MySampleProduction_MyPiZeros

@@ -180,6 +180,7 @@ TH1F *Gen_A_sublead_phi;
 TH1F *Gen_A_sublead_E;
 TH1F *Gen_A_sublead_LB;
 TH1F *Al_Asl_angle;
+TH1F *Asl_E_by_Al_E;
 
 TH1F *Gen_pho1_al_pt;
 TH1F *Gen_pho1_al_eta;
@@ -188,10 +189,62 @@ TH1F *Gen_pho1_al_E;
 TH1F *Gen_pho2_al_pt;
 TH1F *Gen_pho2_al_eta;
 TH1F *Gen_pho2_al_phi;
-TH1F *Gen_pho2_al_E
-;
+TH1F *Gen_pho2_al_E;
+
+TH1F *Gen_pho1_asl_pt;
+TH1F *Gen_pho1_asl_eta;
+TH1F *Gen_pho1_asl_phi;
+TH1F *Gen_pho1_asl_E;
+TH1F *Gen_pho2_asl_pt;
+TH1F *Gen_pho2_asl_eta;
+TH1F *Gen_pho2_asl_phi;
+TH1F *Gen_pho2_asl_E;
+TH1F *al_pho1_by_pho2_pt;
+TH1F *asl_pho1_by_pho2_pt;
+TH1F *al_pho1_by_pho2_E;
+TH1F *asl_pho1_by_pho2_E;
+
+TH1F *al_pho1_pho2_angle;
+TH1F *asl_pho1_pho2_angle;
+TH1F *a_eb_pT;
+TH1F *a_ee_pT;
+TH1F *a_ee_lb;
+TH1F *a_eb_lb;
+TH1F *aa_angle_ebeb;
+TH1F *aa_angle_ebee;
+TH1F *aa_angle_eeee;
+
+TH1F *a_eb_pho_angle;
+TH1F *a_ee_pho_angle; 
+
+TH1F *a_eb_rechit_x;
+TH1F *a_ee_rechit_x;
+TH1F *a_eb_rechit_y;
+TH1F *a_ee_rechit_y;
+TH1F *a_eb_rechit_eta;
+TH1F *a_eb_rechit_phi;
+TH1F *a_ee_rechit_eta;
+TH1F *a_ee_rechit_phi;
+TH1F *Tot_unc_E;
+TH1F *Tot_unc_E_eb;
+TH1F *Tot_unc_E_ee;
 // ============================================= 2D histograms =======================================
-  
+TH2F *Al_mass_vs_Asl_mass;
+TH2F *Al_eta_vs_Asl_eta; 
+TH2F *Al_pt_vs_Asl_pt;
+TH2F *Al_p_vs_Asl_p;
+TH2F *asl_pho_eta1_eta2;
+TH2F *al_pho_eta1_eta2;
+TH2F *al_pho_p1_p2;
+TH2F *asl_pho_p1_p2;
+TH2F *a_eb_hit_eta_phi;
+TH2F *a_eb_hit_xy;
+TH2F *a_ee_hit_xy;
+TH2F *a_ee_hit_eta_phi;
+TH2F *a_eb_hit_eta_phi_En;
+TH2F *a_eb_hit_xy_En;
+TH2F *a_ee_hit_xy_En;
+TH2F *a_ee_hit_eta_phi_En;
 };
 #endif
 
@@ -215,23 +268,85 @@ void AnalyzeHGCMuons::BookHistogram(const char *outFileName)
  Gen_H_E        	= new TH1F ("Gen_H_E"         	, "Gen_H_E"  	, 1000 , 0   , 2000);
  Gen_H_LB       	= new TH1F ("Gen_H_LB"      	, "Gen_H_LB"    , 1000 , 0   , 30  );
 
- Gen_A_lead_mass	= new TH1F ("A_lead_mass"       , "A_lead_mass" , 1000 , 0   , 3   );
- Gen_A_lead_pt		= new TH1F ("A_lead_pT"         , "A_lead_pT"   , 1000 , 0   , 400 );
- Gen_A_lead_eta		= new TH1F ("A_lead_eta"        , "A_lead_eta"  , 1000 , -8  , 8   );
- Gen_A_lead_phi		= new TH1F ("A_lead_phi"        , "A_lead_phi"  , 1000 , -4  , 4   );
- Gen_A_lead_E		= new TH1F ("A_lead_E"          , "A_lead_E"    , 1000 , 0   , 2000);
- Gen_A_lead_LB		= new TH1F ("A_lead_LB"		, "A_lead_LB"	, 1000 , 0   , 2000);
+ Gen_A_lead_mass	= new TH1F ("A1_mass"       , "A_lead_mass" , 1000 , 0   , 3   );
+ Gen_A_lead_pt		= new TH1F ("A1_pT"         , "A_lead_pT"   , 1000 , 0   , 400 );
+ Gen_A_lead_eta		= new TH1F ("A1_eta"        , "A_lead_eta"  , 1000 , -8  , 8   );
+ Gen_A_lead_phi		= new TH1F ("A1_phi"        , "A_lead_phi"  , 1000 , -4  , 4   );
+ Gen_A_lead_E		= new TH1F ("A1_E"          , "A_lead_E"    , 1000 , 0   , 2000);
+ Gen_A_lead_LB		= new TH1F ("A1_LB"		, "A_lead_LB"	, 1000 , 0   , 2000);
 
- Gen_A_sublead_mass        = new TH1F ("A_sublead_mass" , "A_sublead_mass" , 1000 , 0   , 3   );  
- Gen_A_sublead_pt          = new TH1F ("A_sublead_pT"   , "A_sublead_pT"   , 1000 , 0   , 400 );
- Gen_A_sublead_eta         = new TH1F ("A_sublead_eta"  , "A_sublead_eta"  , 1000 , -8  , 8   );  
- Gen_A_sublead_phi         = new TH1F ("A_sublead_phi"  , "A_sublead_phi"  , 1000 , -4  , 4   );  
- Gen_A_sublead_E           = new TH1F ("A_sublead_E"    , "A_sublead_E"    , 1000 , 0   , 2000);
- Gen_A_sublead_LB          = new TH1F ("A_sublead_LB"   , "A_sublead_LB"   , 1000 , 0   , 2000);
+ Gen_A_sublead_mass     = new TH1F ("A2_mass" , "A_sublead_mass" , 1000 , 0   , 3   );  
+ Gen_A_sublead_pt       = new TH1F ("A2_pT"   , "A_sublead_pT"   , 1000 , 0   , 400 );
+ Gen_A_sublead_eta      = new TH1F ("A2_eta"  , "A_sublead_eta"  , 1000 , -8  , 8   );  
+ Gen_A_sublead_phi      = new TH1F ("A2_phi"  , "A_sublead_phi"  , 1000 , -4  , 4   );  
+ Gen_A_sublead_E        = new TH1F ("A2_E"    , "A_sublead_E"    , 1000 , 0   , 2000);
+ Gen_A_sublead_LB       = new TH1F ("A2_LB"   , "A_sublead_LB"   , 1000 , 0   , 2000);
+ 
+ a_eb_pT		= new TH1F ("A_EB_pT" , "A_EB_pT"	, 1000  , 0 , 400);
+ a_ee_pT		= new TH1F ("A_EE_pT" , "A_EE_pT"	, 1000  , 0,  400);
+ a_eb_lb		= new TH1F ("A_EB_LB" , "A_EB_LB"	, 1000  , 0, 2000);
+ a_ee_lb		= new TH1F ("A_EE_LB" , "A_EE_LB"	, 1000  , 0, 2000);
+ aa_angle_ebeb		= new TH1F ("AA_angle_EBEB","AA_angle_EBEB",	1000	, 0  , 4);
+ aa_angle_ebee		= new TH1F ("AA_angle_EBEE","AA_angle_EBEE",	1000	, 0  , 4);
+ aa_angle_eeee		= new TH1F ("AA_angle_EEEE","AA_angle_EEEE",	1000	, 0  , 4);
+ a_eb_pho_angle		= new TH1F ("A_EB_pho_angle","A_EB_pho_angle",	1000	, 0  , 4);
+ a_ee_pho_angle		= new TH1F ("A_EE_pho_angle","A_EE_pho_angle" , 1000	, 0  , 4);
 
- Al_Asl_angle		   = new TH1F ("Angle_bw_As"	, "Angle_bs_As"	   , 1000 , 0   ,  4  );
 
-  }
+ Al_Asl_angle		= new TH1F ("Angle_bw_As"	, "Angle_bs_As"	   , 1000 , 0   ,  4  );
+ Asl_E_by_Al_E		= new TH1F ("E_ratio_A2_A1"	, "E_ratio_sl_l"   , 1000 , 0   ,  20);
+ Gen_pho1_al_pt		= new TH1F ("Pho1_A1_pt"	, "Pho1_al_pt"	   , 1000 , 0   ,  400);
+ Gen_pho1_al_eta	= new TH1F ("Pho1_A1_eta"	, "Pho1_al_eta"	   , 1000 , -8  , 8 );
+ Gen_pho1_al_phi	= new TH1F ("Pho1_A1_phi"	, "Pho1_al_phi"	   , 1000 , -4  , 4);
+ Gen_pho1_al_E		= new TH1F ("Pho1_A1_E"		, "Pho1_al_E"	   , 1000 , 0   ,2000);
+ Gen_pho2_al_pt		= new TH1F ("Pho2_A1_pt"	, "Pho2_al_pt"	   , 1000 , 0   ,  400);
+ Gen_pho2_al_eta	= new TH1F ("Pho2_A1_eta"	, "Pho2_al_eta"	   , 1000 , -8  , 8 );
+ Gen_pho2_al_phi	= new TH1F ("Pho2_A1_phi"	, "Pho2_al_phi"	   , 1000 , -4  , 4);
+ Gen_pho2_al_E		= new TH1F ("Pho2_A1_E"		, "Pho2_al_E"	   , 1000 , 0   ,2000);
+ Gen_pho1_asl_pt        = new TH1F ("Pho1_A2_pt"       , "Pho1_asl_pt"     , 1000 , 0   ,  400);
+ Gen_pho1_asl_eta       = new TH1F ("Pho1_A2_eta"      , "Pho1_asl_eta"    , 1000 , -8  , 8 );
+ Gen_pho1_asl_phi       = new TH1F ("Pho1_A2_phi"      , "Pho1_asl_phi"    , 1000 , -4  , 4);
+ Gen_pho1_asl_E         = new TH1F ("Pho1_A2_E"        , "Pho1_asl_E"      , 1000 , 0   ,2000);
+ Gen_pho2_asl_pt        = new TH1F ("Pho2_A2_pt"       , "Pho2_asl_pt"     , 1000 , 0   ,  400);
+ Gen_pho2_asl_eta       = new TH1F ("Pho2_A2_eta"      , "Pho2_asl_eta"    , 1000 , -8  , 8 );
+ Gen_pho2_asl_phi       = new TH1F ("Pho2_A2_phi"      , "Pho2_asl_phi"    , 1000 , -4  , 4);
+ Gen_pho2_asl_E         = new TH1F ("Pho2_A2_E"        , "Pho2_asl_E"      , 1000 , 0   ,2000);
+ al_pho1_by_pho2_pt	= new TH1F ("A1_pho1_by_pho2_pt", "al_pho1_by_pho2_pt",1000,0,20);
+ al_pho1_by_pho2_E	= new TH1F ("A1_pho1_by_pho2_E"	, "al_pho1_by_pho2_E", 1000, 0, 20);
+ asl_pho1_by_pho2_pt	= new TH1F ("A2_pho1_by_pho2_pt", "asl_pho1_by_pho2_pt",1000,0,20);
+ asl_pho1_by_pho2_E	= new TH1F ("A2_pho1_by_pho2_E" , "asl_pho1_by_pho2_E", 1000, 0, 20); 
+ al_pho1_pho2_angle	= new TH1F ("A1_pho1_pho2_angle", "A1_pho1_pho2_angle",1000,0, 4);
+ asl_pho1_pho2_angle	= new TH1F ("A2_pho1_pho2_angle","A2_pho1_pho2_angle", 1000, 0, 4);
+ a_eb_rechit_x		= new TH1F ("A_EB_hit_X"	, "A_EB_hit_X"	     , 1000, -160,160);
+ a_eb_rechit_y		= new TH1F ("A_EB_hit_Y"	, "A_EB_hit_Y"	     , 1000, -160,160);
+ a_eb_rechit_eta	= new TH1F ("A_EB_hit_eta"	, "A_EB_hit_eta"     , 1000, -1.8, 1.8);
+ a_eb_rechit_phi	= new TH1F ("A_EB_hit_phi"	, "A_EB_hit_phi"     , 1000, -4,  4 );
+ a_ee_rechit_x		= new TH1F ("A_EE_hit_x"	, "A_EE_hit_x"	     , 1000, -160,160);
+ a_ee_rechit_y		= new TH1F ("A_EE_hit_y"	, "A_EE_hit_y"	     , 1000, -160,160);
+ a_ee_rechit_eta	= new TH1F ("A_EE_hit_eta" 	, "A_EE_hit_eta"     , 1000, -3,3);
+ a_ee_rechit_phi	= new TH1F ("A_EE_hit_phi"      , "A_EE_hit_phi"     , 1000, -4,4);
+ Tot_unc_E		= new TH1F ("Tot_unc_E"		, "Tot_unc_E"	     , 1000, 0 , 2000);
+ Tot_unc_E_eb		= new TH1F ("Tot_unc_E_eb"	, "Tot_unc_E_eb"     , 1000, 0 , 2000);
+ Tot_unc_E_ee		= new TH1F ("Tot_unc_E_ee"	, "Tot_unc_E_ee"     , 1000, 0 , 2000);
+
+//=========================================== 2D Histograms =========================================
+Al_eta_vs_Asl_eta	= new TH2F ("A1_eta_A2_eta"	, "Al_eta_A_sl_eta" , 1000, -8 , 8, 1000, -8, 8);
+Al_pt_vs_Asl_pt		= new TH2F ("A1_pt_A2_pt"	, "Al_pt_Asl_pt"    , 1000 , 0, 400,1000, 0 , 400);
+Al_p_vs_Asl_p		= new TH2F ("A1_p_A2_p"		, "Al_p_Asl_p"	    , 1000, 0 , 2000, 1000, 0, 2000);
+Al_mass_vs_Asl_mass	= new TH2F ("A1_mass_A2_mass"	, "Al_mass_Asl_mass", 1000, 0 , 3   , 1000 , 0, 3);
+al_pho_eta1_eta2	= new TH2F ("A1_pho_eta1_eta2"	, "Al_pho_eta1_eta2", 1000, -8 , 8, 1000, -8, 8);
+asl_pho_eta1_eta2       = new TH2F ("A2_pho_eta1_eta2" , "Asl_pho_eta1_eta2", 1000, -8 , 8, 1000, -8, 8);
+al_pho_p1_p2		= new TH2F ("A1_pho_p1_p2"	, "Al_pho_p1_p2"    ,  1000 , 0, 2000, 1000, 0, 2000);  
+asl_pho_p1_p2		= new TH2F ("A2_pho_p1_p2"	, "A_sl_pho_p1_p2"   , 1000 , 0, 2000, 1000, 0, 2000);
+a_eb_hit_eta_phi	= new TH2F ("A_EB_hit_eta_phi"	, "A_EB_hit_eta_phi", 1000  ,-2,2,1000, -4,4);
+a_eb_hit_xy		= new TH2F ("A_EB_hit_xy"	, "A_EB_hit_xy"	    , 1000  , -160,160, 1000, -160,160);
+a_ee_hit_eta_phi	= new TH2F ("A_EE_hit_eta_phi"  , "A_EE_hit_eta_phi", 1000  ,-3,3,1000, -4,4);
+a_ee_hit_xy		= new TH2F ("A_EE_hit_xy"       , "A_EE_hit_xy"     , 1000  , -160,160, 1000, -160,160); 
+a_eb_hit_eta_phi_En	= new TH2F ("A_EB_hit_eta_phi_En", "A_EB_hit_eta_phi_En", 1000  ,-2,2,1000, -4,4);
+a_eb_hit_xy_En		= new TH2F ("A_EB_hit_xy_En"	, "A_EB_hit_xy_En"	    , 1000  , -160,160, 1000, -160,160);
+a_ee_hit_eta_phi_En	= new TH2F ("A_EE_hit_eta_phi_En"  , "A_EE_hit_eta_phi_En", 1000  ,-3,3,1000, -4,4);
+a_ee_hit_xy_En		= new TH2F ("A_EE_hit_xy_En"       , "A_EE_hit_xy_En"     , 1000  , -160,160, 1000, -160,160); 
+	}
   }
 
 AnalyzeHGCMuons::AnalyzeHGCMuons(const TString &inputFileList, const char *outFileName, const char *dataset, const char *massP)

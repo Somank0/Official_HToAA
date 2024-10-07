@@ -183,18 +183,6 @@ double MDeltaR(double eta1, double phi1, double eta2, double phi2) {
   double dphi = MDeltaPhi(phi1, phi2);
   return std::sqrt(deta * deta + dphi * dphi);
 }
-//----------------------- Function to match mother particle properties-----------------
-bool Check_pt_eta_phi(double PT,double ETA,double PHI,vector<float> mother_pt, vector<float> mother_eta, vector<float> mother_phi){
-        setprecision(4);
-	int etacheck = count(mother_eta.begin(),mother_eta.end(),ETA);
-        int ptcheck = count(mother_pt.begin(),mother_pt.end(),PT);
-        int phicheck = count(mother_phi.begin(),mother_phi.end(),PHI);
-	bool result = etacheck /*&& ptcheck*/ && phicheck;
-	return result;}
-bool Check_mother(auto particle, vector<Candidate> mother_array){
-int check_mother = count(mother_array.begin(),mother_array.end(),particle->mother());
-return check_mother;
-}
 
 // ------------ method called for each event  ------------
 void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm::EventSetup &iSetup)
@@ -231,9 +219,6 @@ void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm
     run = 0;
     event = 0;
     lumi = 0;
-    //vector<Candidate> A_lead_array;
-    //vector<Candidate> A_sublead_array;
-
     Candidate* A_lead = 0;
     Candidate* A_sublead = 0;
     bool htoaa = false;
@@ -258,6 +243,7 @@ void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm
               //cout<<part->pt()<<endl;
 		int nA = 0;
 		for( int i = 0 ; (size_t)i<part->numberOfDaughters() ; i++)
+                //cout<<typeid(part->daughter(0)).name()<<endl;
 		{
 			if(abs(part->daughter(0)->pdgId())==35)
 			{
@@ -267,32 +253,69 @@ void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm
 					//cout<<"====================A Lead==================="<<endl;
 					//cout<<part->daughter(0)->mass()<<endl;
 					//cout<<part->daughter(0)->pt()<<endl;
-					//if(part->daughter(0)->daughter(0)->pdgId()==22){
 					A_lead_Gen_mass.push_back(part->daughter(0)->mass());
 					A_lead_Gen_pt.push_back(part->daughter(0)->pt());
 					A_lead_Gen_eta.push_back(part->daughter(0)->eta());
 					A_lead_Gen_phi.push_back(part->daughter(0)->phi());
                                         A_lead = part->daughter(0)->clone();
-				if(A_lead->daughter(0)->status()!=1||A_lead->daughter(0)->pdgId() != 22){cout<<"A_lead daughter_0"<<"\t"<<"pdgId"<<"\t"<<A_lead->daughter(0)->pdgId()<<"\t"<<"status"<<"\t"<<A_lead->daughter(0)->status()<<endl;
-				if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"A_lead daughter_1"<<"\t"<<"pdgId"<<"\t"<<A_lead->daughter(1)->pdgId()<<"\t"<<"status"<<"\t"<<A     _lead->daughter(1)->status()<<endl;                                
-        //A_lead_array.push_back(A_lead);}
-
-				}
+                                        //cout<<"A_lead mass"<<"\t"<<part->daughter(0)->mass()<<endl;
+                                        cout<<"A_lead mass"<<"\t"<<A_lead->mass()<<endl;
+                                }
+				
 				else if(nA==2)
 				{
 					//cout<<"====================A sublead==================="<<endl;
 					//cout<<part->daughter(1)->mass()<<endl;
 					//cout<<part->daughter(1)->pt()<<endl;
-					//if(part->daughter(1)->daughter(0)->pdgId()==22){
+
 					A_sublead_Gen_mass.push_back(part->daughter(1)->mass());
 					A_sublead_Gen_pt.push_back(part->daughter(1)->pt());
 					A_sublead_Gen_eta.push_back(part->daughter(1)->eta());
 					A_sublead_Gen_phi.push_back(part->daughter(1)->phi());
                                         A_sublead = part->daughter(1)->clone();
-if(A_sublead->daughter(0)->status()!=1||A_sublead->daughter(0)->pdgId() != 22){cout<<"A_sublead daughter_0"<<"\t"<<"pdgId"<<"\t"<<A_sublead->daughter(0)->pdgId()<<"\t"<<"status"<<"\t"<<A_sublead->daughter(0)->status()<<endl;
-if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"A_sublead daughter_1"<<"\t"<<"pdgId"<<"\t"<<A_sublead->daughter(1)->pdgId()<<"\t"<<"status"<<"\t"<<A_sublead->daughter(1)->status()<<endl;                                        //A_sublead_array.push_back(A_sublead);}
+                                        cout<<"A_sublead mass"<<"\t"<<part->daughter(1)->mass()<<endl;
+                                      
 				}
-			}
+                                /*int n_pho=0;
+				for (int x=0; (size_t)x < A_lead->numberOfDaughters(); x++){
+                                if (abs(A_lead->daughter(0)->pdgId())==22 && A_lead->daughter(0)->status()==1){
+                                n_pho ++;
+                                if(n_pho==1){
+                                   A_lead_Pho_Gen_Pt.push_back(A_lead->daughter(0)->pt());
+                                   A_lead_Pho_Gen_Eta.push_back(A_lead->daughter(0)->eta());
+                                   A_lead_Pho_Gen_Phi.push_back(A_lead->daughter(0)->phi());
+                                   A_lead_Pho_Gen_E.push_back(A_lead->daughter(0)->energy());
+                                     }
+                                    }
+                               else if(n_pho==2){
+                                   A_lead_Pho_Gen_Pt.push_back(A_lead->daughter(1)->pt());
+                                   A_lead_Pho_Gen_Eta.push_back(A_lead->daughter(1)->eta());
+                                   A_lead_Pho_Gen_Phi.push_back(A_lead->daughter(1)->phi());
+                                   A_lead_Pho_Gen_E.push_back(A_lead->daughter(1)->energy());
+                                     }
+                                    }
+   				int n_pho2=0;
+                                for (int x=0; (size_t)x < A_sublead->numberOfDaughters(); x++){
+                                if (abs(A_sublead->daughter(0)->pdgId())==22 && A_sublead->daughter(0)->status()==1){
+                                n_pho ++;
+                                if(n_pho2==1){
+                                   A_sublead_Pho_Gen_Pt.push_back(A_sublead->daughter(0)->pt());
+                                   A_sublead_Pho_Gen_Eta.push_back(A_sublead->daughter(0)->eta());
+                                   A_sublead_Pho_Gen_Phi.push_back(A_sublead->daughter(0)->phi());
+                                   A_sublead_Pho_Gen_E.push_back(A_sublead->daughter(0)->energy());
+                                     }
+                                    }
+                               else if(n_pho2==2){
+                                   A_sublead_Pho_Gen_Pt.push_back(A_sublead->daughter(1)->pt());
+                                   A_sublead_Pho_Gen_Eta.push_back(A_sublead->daughter(1)->eta());
+                                   A_sublead_Pho_Gen_Phi.push_back(A_sublead->daughter(1)->phi());
+                                   A_sublead_Pho_Gen_E.push_back(A_sublead->daughter(1)->energy());
+                                     }
+                                    }*/
+                           
+
+                      }
+			
 		}
 		if(nA!=2)
 		{
@@ -306,8 +329,10 @@ if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"
 					H_Gen_pt.push_back(part->pt());
 					H_Gen_eta.push_back(part->eta());
 					H_Gen_phi.push_back(part->phi());
+                                        cout <<"H_gen_mass" <<"\t"<<part->mass()<<endl;
 		}
-	    }
+	    
+	}
     }
 		
     
@@ -388,8 +413,8 @@ if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"
 	double mindr = 1000;
 	int A_flag;
 	//cout<<"Here 4"<<endl;
-	//cout<<"A lead eta"<<"\t"<<A_lead->eta()<<endl;
-        //cout <<"A sublead eta"<< "\t"<< A_sublead->eta()<<endl;
+	cout<<"A lead eta"<<"\t"<<A_lead->eta()<<endl;
+        cout <<"A sublead eta"<< "\t"<< A_sublead->eta()<<endl;
         for (edm::View<GenParticle>::const_iterator part = genParticles->begin(); part != genParticles->end(); ++part)
         {
 		double dR = MDeltaR(part->eta(),part->phi(),pho->eta(),pho->phi());
@@ -406,7 +431,7 @@ if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"
 		}	
 	}
 	if(mindr>0.1) continue ;
-	//cout<<"A flag:"<<A_flag<<endl;
+	cout<<"A flag:"<<A_flag<<endl;
         const SuperClusterRef &sc = pho->superCluster();
         // const SuperClusterRef& sc = pho->parentSuperCluster(); // mustache cluster
         std::vector<std::pair<DetId, float>> hitsAndFractions = sc->hitsAndFractions();
@@ -707,29 +732,30 @@ if(A_lead->daughter(1)->status()!=1||A_lead->daughter(1)->pdgId() != 22){cout<<"
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
     if (isMC_)
     {
+cout <<A_flags<<endl;
         for (edm::View<GenParticle>::const_iterator part = genParticles->begin(); part != genParticles->end(); ++part)
         {
-            if (part->status() == 1 && abs(part->pdgId()) == 22 && abs(part->mother()->pdgId())==35 )
+            if (part->status() == 1 && abs(part->pdgId()) == 22 && abs(part->mother()->pdgId())==35)
             {
-//int eta_check=count(A_lead_Gen_eta.begin(),A_lead_Gen_eta.end(),part->mother()->eta());
-bool A_lead_check = Check_pt_eta_phi(part->mother()->pt(),part->mother()->eta(),part->mother()->phi(),A_lead_Gen_pt,A_lead_Gen_eta,A_lead_Gen_phi);
-bool A_sublead_check = Check_pt_eta_phi(part->mother()->pt(),part->mother()->eta(),part->mother()->phi(),A_sublead_Gen_pt,A_sublead_Gen_eta,A_sublead_Gen_phi);
-
-//bool A_lead_check = Check_mother(part,A_lead_array);
-//bool A_sublead_check = Check_mother(part,A_sublead_array);
-              // cout<<A_lead_check<<endl;
-                if(A_sublead_check){
-                    A_sublead_Pho_Gen_Pt.push_back(part->pt());
-                    A_sublead_Pho_Gen_Eta.push_back(part->eta());
-                    A_sublead_Pho_Gen_Phi.push_back(part->phi());
-                    A_sublead_Pho_Gen_E.push_back(part->energy()); }
-                 if(A_lead_check){
-                //cout<<"Here "<<A_lead->eta()<<endl;
+           if(true){
                 A_lead_Pho_Gen_Pt.push_back(part->pt());
                 A_lead_Pho_Gen_Eta.push_back(part->eta());
                 A_lead_Pho_Gen_Phi.push_back(part->phi());
-                A_lead_Pho_Gen_E.push_back(part->energy());}
-           }
+                A_lead_Pho_Gen_E.push_back(part->energy());
+}
+//cout<<"A_lead_photon data filled"<<endl;
+         // else if(part->mother()->eta() == A_sublead->eta() && part->mother()->phi()==A_sublead->phi())
+         else if (false)
+{
+                A_sublead_Pho_Gen_Pt.push_back(part->pt());
+                A_sublead_Pho_Gen_Eta.push_back(part->eta());
+                A_sublead_Pho_Gen_Phi.push_back(part->phi());
+                A_sublead_Pho_Gen_E.push_back(part->energy());
+cout <<"A_sublead_Pho_Gen_Pt"<<"\t"<<part->pt()<<endl;
+}
+// cout<<"A_sublead_photon data filled"<<endl;
+      
+            }
         }
     }
 
@@ -986,16 +1012,20 @@ void Photon_RefinedRecHit_NTuplizer::beginJob()
 
     if (isMC_)
     {
+     /*   T->Branch("Pho_Gen_Pt", &Pho_Gen_Pt);
+        T->Branch("Pho_Gen_Eta", &Pho_Gen_Eta);
+        T->Branch("Pho_Gen_Phi", &Pho_Gen_Phi);
+        T->Branch("Pho_Gen_E", &Pho_Gen_E);    */
         T->Branch("A_lead_Pho_Gen_Pt", &A_lead_Pho_Gen_Pt);
         T->Branch("A_lead_Pho_Gen_Eta", &A_lead_Pho_Gen_Eta);
         T->Branch("A_lead_Pho_Gen_Phi", &A_lead_Pho_Gen_Phi);
-        T->Branch("A_lead_Pho_Gen_E", &A_lead_Pho_Gen_E);
+        T->Branch("A_lead_Pho_Gen_E", &A_lead_Pho_Gen_E);   
         T->Branch("A_sublead_Pho_Gen_Pt", &A_sublead_Pho_Gen_Pt);
         T->Branch("A_sublead_Pho_Gen_Eta", &A_sublead_Pho_Gen_Eta);
         T->Branch("A_sublead_Pho_Gen_Phi", &A_sublead_Pho_Gen_Phi);
         T->Branch("A_sublead_Pho_Gen_E", &A_sublead_Pho_Gen_E);
-
-    }
+ 
+}
 
     T->Branch("rho", &rho, "rho/F");
 
@@ -1378,16 +1408,20 @@ void Photon_RefinedRecHit_NTuplizer::ClearTreeVectors()
 
     if (isMC_)
     {
-        A_lead_Pho_Gen_Pt.clear();
+/*        Pho_Gen_Pt.clear();
+        Pho_Gen_Eta.clear(); // Commented out by Somanko
+        Pho_Gen_Phi.clear();
+        Pho_Gen_E.clear();*/
+ A_lead_Pho_Gen_Pt.clear();
         A_lead_Pho_Gen_Eta.clear();
         A_lead_Pho_Gen_Phi.clear();
         A_lead_Pho_Gen_E.clear();
-        A_sublead_Pho_Gen_Pt.clear();
+A_sublead_Pho_Gen_Pt.clear();
         A_sublead_Pho_Gen_Eta.clear();
         A_sublead_Pho_Gen_Phi.clear();
         A_sublead_Pho_Gen_E.clear();
- 
-   }
+
+    }
 
     passMediumId_.clear();
     passTightId_.clear();

@@ -1,6 +1,0 @@
-tmp/slc7_amd64_gcc700/src/MySampleProduction/MyPiZeros/test/testMySampleProductionMyPiZerosTP/test_catch2_main.cc.o: \
- src/MySampleProduction/MyPiZeros/test/test_catch2_main.cc \
-
-tmp/slc7_amd64_gcc700/src/MySampleProduction/MyPiZeros/test/testMySampleProductionMyPiZerosTP/test_catch2_MyPiZeros.cc.o: \
- src/MySampleProduction/MyPiZeros/test/test_catch2_MyPiZeros.cc \
-

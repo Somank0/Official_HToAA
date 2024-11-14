@@ -33,7 +33,7 @@ Photon_RefinedRecHit_NTuplizer::Photon_RefinedRecHit_NTuplizer(const edm::Parame
 
 Photon_RefinedRecHit_NTuplizer::~Photon_RefinedRecHit_NTuplizer()
 {
-
+T->Write("", TObject::kOverwrite);
     // do anything here that needs to be done at desctruction time
     // (e.g. close files, deallocate resources etc.)
 }
@@ -405,6 +405,7 @@ void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm
         if (pho->pt() < 10)
             continue;
 	double mindr = 1000;
+        //double mindr1= 1000;
 	int A_flag;
 	//cout<<"Here 4"<<endl;
 	//cout<<"A lead eta"<<"\t"<<A_lead->eta()<<endl;
@@ -413,18 +414,35 @@ void Photon_RefinedRecHit_NTuplizer::analyze(const edm::Event &iEvent, const edm
         {
 		double dR = MDeltaR(part->eta(),part->phi(),pho->eta(),pho->phi());
 
-		if( dR < mindr && part->eta() == A_lead->eta() && part->phi() == A_lead->phi())
+		if( dR < mindr && part/*->mother()*/->eta() == A_lead->eta() && part/*->mother()*/->phi() == A_lead->phi())
 		{
 			A_flag=0;
 			mindr = dR;	
 		}	
-		if( dR < mindr && part->eta() == A_sublead->eta() && part->phi() == A_sublead->phi() )
+		else if( dR < mindr && part/*->mother()*/->eta() == A_sublead->eta() && part/*->mother()*/->phi() == A_sublead->phi() )
 		{
 			A_flag=1;
 			mindr = dR;	
 		}	
 	}
-	if(mindr>0.1) continue ;
+        /*for (edm::View<GenParticle>::const_iterator part = genParticles->begin(); part != genParticles->end(); ++part)
+        {
+                double dR = MDeltaR(part->eta(),part->phi(),pho->eta(),pho->phi());*/
+
+                //if( dR < mindr && part/*->mother()*/->eta() == A_lead->eta() && part/*->mother()*/->phi() == A_lead->phi())
+               /* {
+                        A_flag=0;
+                        mindr = dR;     
+                }*/             
+               // if( dR < mindr1 && part/*->mother()*/->eta() == A_sublead->eta() && part/*->mother()*/->phi() == A_sublead->phi() )
+               /* {
+                        A_flag=1;
+                        mindr1 = dR;     
+                }     
+        }*/
+ 
+	if(mindr >0.1) continue ;
+        //if(mindr1 > 0.1) continue;
 	//cout<<"A flag:"<<A_flag<<endl;
         const SuperClusterRef &sc = pho->superCluster();
         // const SuperClusterRef& sc = pho->parentSuperCluster(); // mustache cluster
@@ -774,6 +792,9 @@ void Photon_RefinedRecHit_NTuplizer::beginJob()
 
     edm::Service<TFileService> fs;
     T = fs->make<TTree>("T", "MyTuple");
+    //T->SetAutoSave(0);     // No automatic saves
+    //T->SetAutoFlush(1000);   // No automatic flushing
+
     T->Branch("iEtaPho1", &(iEta[0]));
     T->Branch("iPhiPho1", &(iPhi[0]));
     T->Branch("Hit_ES_Eta_Pho1", &(Hit_ES_Eta[0]));
@@ -1249,7 +1270,8 @@ void Photon_RefinedRecHit_NTuplizer::ClearTreeVectors()
     RecHitFlag_kESTS3Saturated[1].clear();
     RecHitFlag_kESTS13Sigmas[1].clear();
     RecHitFlag_kESTS15Sigmas[1].clear();
-
+    iEta[2].clear();
+    iPhi[2].clear();
     Hit_ES_Eta[2].clear();
     Hit_ES_Phi[2].clear();
     Hit_ES_X[2].clear();
@@ -1303,7 +1325,8 @@ void Photon_RefinedRecHit_NTuplizer::ClearTreeVectors()
     RecHitFlag_kESTS3Saturated[2].clear();
     RecHitFlag_kESTS13Sigmas[2].clear();
     RecHitFlag_kESTS15Sigmas[2].clear();
-
+    iEta[3].clear();
+    iPhi[3].clear();
     Hit_ES_Eta[3].clear();
     Hit_ES_Phi[3].clear();
     Hit_ES_X[3].clear();
